@@ -1,0 +1,45 @@
+{
+     "content_scripts": [ {
+          "js": [
+               "js/main.js",
+               "js/api/ryd.js"
+          ],
+          "matches": [ 
+               "*://youtube.com/*",
+               "*://www.youtube.com/*",
+               "*://m.youtube.com/*"
+          ]
+     } ],
+     "host_permissions": [      
+          "*://youtube.com/*",
+          "*://www.youtube.com/*",
+          "*://m.youtube.com/*",
+          "*://returnyoutubedislikeapi.com/*"
+     ], 
+     "manifest_version" : 3,
+     "version": "1.1",
+     "name": "YouTube Dislikes",
+     "description": "description1",
+     "icons": { 
+          "32": "views/img/icon32x32.png",
+          "44": "views/img/icon44x44.png",
+          "128": "views/img/icon128x128.png" 
+     },
+     "author" : "1",
+     "default_locale" : "en",
+     "options_ui": {
+     "page": "views/html/index.html",
+     "open_in_tab": true
+     },
+     "action": {
+          "default_popup": "views/html/index.html",
+          "default_icon": {
+               "32": "views/img/icon32x32.png"
+          }
+     },
+     "web_accessible_resources":  [{
+          "resources": ["views/css/*.css"],
+          "matches": [],
+          "extension_ids": []
+     }]
+}
