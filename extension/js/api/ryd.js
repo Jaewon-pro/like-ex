@@ -14,7 +14,6 @@ Program.apiController["ryd"].api = (videoId) => {
 
 
 Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
-    console.log(videoId);
     const url = Program.apiController["ryd"].api(videoId);
     const response = await fetch(url);
     const data = await response.json();
@@ -36,11 +35,14 @@ Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
 // };
 
 
-Program.apiController["ryd"].onLoad = () => {
-    console.log("api onload");
-    Program.apiController["ryd"].fetchGetRqs(getVideoId()).then(data =>
-       console.log(`The number of dislikes is: ${data.dislikes}`)
-    )
+Program.apiController["ryd"].onLoad = async () => {
+    const vid = getVideoId();
+    if (vid === null) return;
+    await Program.apiController["ryd"].fetchGetRqs(getVideoId()).then(data => {
+        //console.log(`The number of dislikes is: ${data.dislikes}`)
+        Program.data = data;
+    })
+    .then(data => Promise.resolve(data));
 };
 
 

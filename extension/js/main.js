@@ -1,117 +1,66 @@
 
 var Program = {
+    data : {},
     apiController : {}
-}
 
-const IsYtb = (url) => {
-    if ((url.hostname === "www.youtube.com" || url.hostname === "m.youtube.com") && url.pathname.startsWith("/watch")) {
-        console.log("This is a YouTube video URL.");
-        return true;
-      } else {
-        console.log("This is not a YouTube video URL.");
-        return false;
-      }
 }
 
 const getVideoId = () => {
     const url = new URL(window.location.href);
     const vid = url.searchParams.get("v");
-    // const params = new URLSearchParams(new URL(currentUrl).search);
-    // const vid = params.get("v");
     return vid;
 }
 
 
 const convertFormat = (countDislikes) => {
+    if (countDislikes === undefined) return -1;
     if (countDislikes < 1000) return countDislikes;
     return countDislikes;
 }
 
 async function insertDislikes(dislikesString) {
     // <div id = segmented-dislike-button>
-    // <div class="yt-spec-button-shape-next__icon">
-    // <svg class = "style-scope yt-icon"></svg>
-    // svg 다음에 Dislikes count 삽입
-    const svgElement = document.querySelector("#segmented-dislike-button .yt-spec-button-shape-next__icon svg");
-//document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div")
+    //   <div class="yt-spec-button-shape-next__icon">
+    //     <yt-icon>
+    // yt-icon sibling 위치에 <span> Dislikes count 삽입
 
-    console.log(svgElement);
+    //const svgElement = document.querySelector("#segmented-dislike-button .yt-spec-button-shape-next__icon svg"); //svg 뒤로 태그 사이에 끼워넣어야지 표현 가능, 이후 수정 필요
+    const svgElement = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon");
+
     if (svgElement === null) {
-        console.log("Fail to find SVG");
+        console.log("Fail to find element1");
         return;
     }
     const spanDislikes = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon > span")
     if (spanDislikes === null ) {
         const newElement = document.createElement("span");
-        newElement.innerHTML = dislikesString;
-        svgElement.parentNode.insertBefore(newElement, svgElement.nextSibling);
+        newElement.textContent = dislikesString;
+        svgElement.insertAdjacentHTML('afterend', newElement.outerHTML);
+        // console.log(newElement);
+        // console.log(svgElement.parentElement);
     } else {
-        spanDislikes.innerHTML = dislikesString;
+        spanDislikes.textContent = dislikesString;
     }
-
 }
 
 async function resizeDislikesButton() {
     document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > yt-touch-feedback-shape > div > div.yt-spec-touch-feedback-shape__fill");
 }
 
-
-self.addEventListener('fetch', event => {
-    event.respondWith(async function() {
-        const preloadResponse = event.preloadResponse;
-        if (preloadResponse) {
-            // Wait for the preload response to settle before responding
-            await preloadResponse;
-            return preloadResponse;
-        }
-        console.log("fetch11");
-        // Fetch the resource from the network
-        const response = await fetch(event.request);
-        return response;
-    }());
-});
-
-//DOMContentLoaded
 document.addEventListener("yt-navigate-finish", () => {
     // Handler when Youtube is fully loaded
-    console.log("aaa");
     // const API = getAPI();
     // API.name
     const nameAPI = "ryd";
-    
-    console.log(getVideoId());
 
-    //Program.apiController[nameAPI].onLoad();
-    insertDislikes("123Wo");
-});
-document.addEventListener("yt-guide-close", () => {
-    // Handler when the DOM is fully loaded
-    console.log("bb1b");
-});document.addEventListener("yt-guide-show", () => {
-    // Handler when the DOM is fully loaded
-    console.log("bb3b");
-});document.addEventListener("yt-guide-toggle", () => {
-    // Handler when the DOM is fully loaded
-    console.log("b4bb");
-});document.addEventListener("yt-navigate-cache", () => {
-    // Handler when the DOM is fully loaded
-    console.log("b5bb");
-});document.addEventListener("yt-navigate-start", () => {
-    // Handler when the DOM is fully loaded
-    console.log("b6bb");
-});document.addEventListener("yt-page-type-changed", () => {
-    // Handler when the DOM is fully loaded
-    console.log("bb7b");
-});document.addEventListener("yt-toggle-button", () => {
-    // Handler when the DOM is fully loaded
-    console.log("bb8b");
+    Program.apiController[nameAPI].onLoad().then(() => {
+        ///console.log(Program.data);
+        insertDislikes(convertFormat(Program.data.dislikes));
+    });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Handler when the DOM is fully loaded
-    console.log("bbb");
-});
 
+Program.data = {};
 Program.apiController = {};
 Program.getInstance = () => {
     if (typeof Program.instance == "undefined") Program.instance = new Program();
