@@ -14,7 +14,12 @@ const getVideoId = () => {
 
 const convertFormat = (countDislikes) => {
     if (countDislikes === undefined) return -1;
-    if (countDislikes < 1000) return countDislikes;
+    
+    const unit = ['', 'K', 'M', 'B']
+    for (let i = 0; i < unit.length; ++i) {
+        if (countDislikes < 1000) { return countDislikes+unit[i]; }
+        countDislikes = parseInt(countDislikes / 1000);
+    }
     return countDislikes;
 }
 
@@ -25,9 +30,9 @@ async function insertDislikes(dislikesString) {
     // yt-icon sibling 위치에 <span> Dislikes count 삽입
 
     //const svgElement = document.querySelector("#segmented-dislike-button .yt-spec-button-shape-next__icon svg"); //svg 뒤로 태그 사이에 끼워넣어야지 표현 가능, 이후 수정 필요
-    const svgElement = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon");
+    const iconElement = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon");
 
-    if (svgElement === null) {
+    if (iconElement === null) {
         console.log("Fail to find element1");
         return;
     }
@@ -35,7 +40,7 @@ async function insertDislikes(dislikesString) {
     if (spanDislikes === null ) {
         const newElement = document.createElement("span");
         newElement.textContent = dislikesString;
-        svgElement.insertAdjacentHTML('afterend', newElement.outerHTML);
+        iconElement.insertAdjacentHTML('afterend', newElement.outerHTML);
         // console.log(newElement);
         // console.log(svgElement.parentElement);
     } else {

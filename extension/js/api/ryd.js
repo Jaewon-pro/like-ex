@@ -1,5 +1,4 @@
 // Return Youtube Dislike API
-//import { Program } from '..main.js';
 
 Program.apiController["ryd"] = {
 
@@ -20,21 +19,6 @@ Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
     return Promise.resolve(data);
 }
 
-
-// Program.apiController["ryd"].fetchPostRqs = async (videoId) => {
-//     const url = Program.apiController["ryd"].api(videoId);
-//     return fetch("https://returnyoutubedislikeapi.com/Votes", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/x-www-form-urlencoded"
-//         },
-//         body: `videoId=${videoId}`
-//       })
-//       .then(response => response.text());
-//       //.then(data => Promise.resolve(data));
-// };
-
-
 Program.apiController["ryd"].onLoad = async () => {
     const vid = getVideoId();
     if (vid === null) return;
@@ -44,16 +28,6 @@ Program.apiController["ryd"].onLoad = async () => {
     })
     .then(data => Promise.resolve(data));
 };
-
-
-
-//Program.api["ryd"] = Program.apiController["ryd"];
-
-
-// Usage :
-// Program.apiController["ryd"].fetchRsp("DSFSDFDF").then(data => {
-//   console.log(`The number of dislikes is: ${data.dislikes}`);
-// });
 
 // Response
 // {
