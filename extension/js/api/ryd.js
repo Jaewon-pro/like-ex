@@ -23,7 +23,7 @@ Program.apiController["ryd"].onLoad = async () => {
     const vid = getVideoId();
     if (vid === null) return;
     await Program.apiController["ryd"].fetchGetRqs(getVideoId()).then(data => {
-        //console.log(`The number of dislikes is: ${data.dislikes}`)
+        //console.log(`${vid}: The number of dislikes is: ${data.dislikes}`)
         Program.data = data;
     })
     .then(data => Promise.resolve(data));

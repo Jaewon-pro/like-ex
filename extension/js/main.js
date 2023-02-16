@@ -41,8 +41,6 @@ async function insertDislikes(dislikesString) {
         const newElement = document.createElement("span");
         newElement.textContent = dislikesString;
         iconElement.insertAdjacentHTML('afterend', newElement.outerHTML);
-        // console.log(newElement);
-        // console.log(svgElement.parentElement);
     } else {
         spanDislikes.textContent = dislikesString;
     }
@@ -59,7 +57,6 @@ document.addEventListener("yt-navigate-finish", () => {
     const nameAPI = "ryd";
 
     Program.apiController[nameAPI].onLoad().then(() => {
-        ///console.log(Program.data);
         insertDislikes(convertFormat(Program.data.dislikes));
     });
 });
