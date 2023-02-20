@@ -14,19 +14,34 @@ Program.apiController["ryd"].api = (videoId) => {
 
 Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
     const url = Program.apiController["ryd"].api(videoId);
-    const response = await fetch(url);
-    const data = await response.json();
-    return Promise.resolve(data);
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(`Error fetching data: ${error.message}`);
+        throw error;
+    }
+    // const url = Program.apiController["ryd"].api(videoId);
+    // const response = await fetch(url);
+    // const data = await response.json();
+    // return data;
 }
 
 Program.apiController["ryd"].onLoad = async () => {
     const vid = getVideoId();
-    if (vid === null) return;
-    await Program.apiController["ryd"].fetchGetRqs(getVideoId()).then(data => {
-        //console.log(`${vid}: The number of dislikes is: ${data.dislikes}`)
-        Program.data = data;
-    })
-    .then(data => Promise.resolve(data));
+    if (vid === null) { return null; }
+    try {
+        const data = await Program.apiController["ryd"].fetchGetRqs(vid);
+        //console.log(`${vid}: The number of dislikes is: ${data.dislikes}`);
+        return data;
+    } catch (error) {
+        console.error(`Error fetching data: ${error.message}`);
+        throw error;
+    }
 };
 
 // Response

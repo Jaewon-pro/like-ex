@@ -1,6 +1,5 @@
 
 var Program = {
-    data : {},
     apiController : {}
 
 }
@@ -12,15 +11,19 @@ const getVideoId = () => {
 }
 
 
-const convertFormat = (countDislikes) => {
-    if (countDislikes === undefined) return -1;
+const convertFormat = (dislikeCount) => {
+    if (dislikeCount === undefined) return -1;
+
+    const THRESHOLD = 1000;
+    const UNIT_SUFFIXES = ['', 'K', 'M', 'B'];
     
-    const unit = ['', 'K', 'M', 'B']
-    for (let i = 0; i < unit.length; ++i) {
-        if (countDislikes < 1000) { return countDislikes+unit[i]; }
-        countDislikes = parseInt(countDislikes / 1000);
+    let i = 0;
+    while (dislikeCount >= THRESHOLD) {
+        dislikeCount = Math.floor(dislikeCount / THRESHOLD);
+        ++i;
     }
-    return countDislikes;
+    
+    return dislikeCount + UNIT_SUFFIXES[i];
 }
 
 async function insertDislikes(dislikesString) {
@@ -56,8 +59,8 @@ document.addEventListener("yt-navigate-finish", () => {
     // API.name
     const nameAPI = "ryd";
 
-    Program.apiController[nameAPI].onLoad().then(() => {
-        insertDislikes(convertFormat(Program.data.dislikes));
+    Program.apiController[nameAPI].onLoad().then((data) => {
+        insertDislikes(convertFormat(data.dislikes));
     });
 });
 
