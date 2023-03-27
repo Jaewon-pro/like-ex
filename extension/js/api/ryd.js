@@ -9,7 +9,7 @@ Program.apiController["ryd"].api = (videoId) => {
     return `https://returnyoutubedislikeapi.com/Votes?videoId=${videoId}`;
 }
 
-Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
+Program.apiController["ryd"].fetchJson = async (videoId) => {
     const url = Program.apiController["ryd"].api(videoId);
     try {
         const response = await fetch(url);
