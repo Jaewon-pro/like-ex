@@ -2,6 +2,7 @@
      "content_scripts": [ {
           "js": [
                "extension/js/main.js",
+               "extension/js/utils.js",
                "extension/js/api/ryd.js"
           ],
           "matches": [ 
@@ -19,7 +20,7 @@
      "manifest_version" : 3,
      "version": "1.1",
      "name": "YouTube Dislikes",
-     "description": "description1",
+     "description": "Displaying Dislikes Number for Youtube.",
      "icons": { 
           "32": "extension/views/img/icon32x32.png",
           "44": "extension/views/img/icon44x44.png",

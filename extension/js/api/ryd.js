@@ -1,16 +1,13 @@
 // Return Youtube Dislike API
 
 Program.apiController["ryd"] = {
-
     name : "Return Youtube Dislike API",
-    discription : "More informations are in https://returnyoutubedislikeapi.com/",
-    //kxOuG8jMIgI
+    description : "More information are in https://returnyoutubedislikeapi.com/",
 }
 
 Program.apiController["ryd"].api = (videoId) => {
     return `https://returnyoutubedislikeapi.com/Votes?videoId=${videoId}`;
 }
-
 
 Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
     const url = Program.apiController["ryd"].api(videoId);
@@ -25,10 +22,6 @@ Program.apiController["ryd"].fetchGetRqs = async (videoId) => {
         console.error(`Error fetching data: ${error.message}`);
         throw error;
     }
-    // const url = Program.apiController["ryd"].api(videoId);
-    // const response = await fetch(url);
-    // const data = await response.json();
-    // return data;
 }
 
 Program.apiController["ryd"].onLoad = async () => {
