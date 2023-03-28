@@ -1,9 +1,31 @@
 
-const getVideoId = () => {
+Program.utils.getVideoInfo = () => {
+    const info = {
+        id: '',
+        type: '',
+    };
     const url = new URL(window.location.href);
-    const vid = url.searchParams.get("v");
-    return vid;
+    if (url.pathname.includes("watch")) { // watch?v= VID
+        info.type = "video";
+        info.id = url.searchParams.get("v");
+    }
+    else if (url.pathname.includes("shorts")) {
+        info.type = "shorts";
+        info.id = url.pathname.split("/")[2]; 
+    }
+    else { return null; }
+    return info;
 }
+
+Program.utils.display = (data) => {
+    if (data === null) return;
+    const formatted = convertFormat(data.dislikes);
+    if (data.type === "video") {
+        insertDislikes(formatted);
+    } else if (data.type === "shorts") {
+        insertDislikesShorts(formatted);
+    }
+};
 
 const convertFormat = (dislikeCount) => {
     if (dislikeCount === undefined) return "Undefined";
@@ -24,7 +46,7 @@ async function insertDislikes(dislikesString) {
     const iconElement = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon");
 
     if (iconElement === null) {
-        console.log("Failed to find an iconElement");
+        console.error("Failed to find an iconElement");
         return;
     }
     const spanDislikes = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon > span")
@@ -37,6 +59,18 @@ async function insertDislikes(dislikesString) {
     }
 }
 
+async function insertDislikesShorts(dislikesString) {
+    const spanElement = document.querySelector("#dislike-button > yt-button-shape > label > div > span");
+    if (spanElement === null) {
+        console.error("Failed to find a spanElement");
+        return;
+    }
+    spanElement.textContent = dislikesString;
+}
+
 // async function resizeDislikesButton() {
-//     document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > yt-touch-feedback-shape > div > div.yt-spec-touch-feedback-shape__fill");
+//     const divLike = document.querySelector("#segmented-like-button > ytd-toggle-button-renderer > yt-button-shape > button > yt-touch-feedback-shape > div > div.yt-spec-touch-feedback-shape__fill");
+//     const divDislike = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > yt-touch-feedback-shape > div > div.yt-spec-touch-feedback-shape__fill");
+//     divDislike.offsetWidth = divLike.offsetWidth;
 // }
+

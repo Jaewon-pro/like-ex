@@ -10,9 +10,10 @@ Program.apiController["ryd"].api = (videoId) => {
 }
 
 Program.apiController["ryd"].fetchJson = async (videoId) => {
-    const url = Program.apiController["ryd"].api(videoId);
+    const endPoint = Program.apiController["ryd"].api(videoId);
+    console.log(endPoint);
     try {
-        const response = await fetch(url);
+        const response = await fetch(endPoint);
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
@@ -25,17 +26,18 @@ Program.apiController["ryd"].fetchJson = async (videoId) => {
 }
 
 Program.apiController["ryd"].onLoad = async () => {
-    const vid = getVideoId();
-    if (vid === null) { return null; }
+    const videoInfo = Program.utils.getVideoInfo();
+    if (videoInfo === null) { return null; }
     try {
-        const data = await Program.apiController["ryd"].fetchGetRqs(vid);
-        //console.log(`${vid}: The number of dislikes is: ${data.dislikes}`);
+        const data = await Program.apiController["ryd"].fetchJson(videoInfo.id);
+        data["type"] = videoInfo.type;
         return data;
     } catch (error) {
         console.error(`Error fetching data: ${error.message}`);
         throw error;
     }
 };
+
 
 // Response
 // {
