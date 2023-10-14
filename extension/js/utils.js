@@ -1,17 +1,13 @@
 
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-Program.utils.createButton = async (buttonName) => {
+Program.utils.createButton = async (buttonId) => {
     const waitTime = 100;
     await delay(waitTime); // 바로 하면 못 찾음
 
-    const menu = document.querySelector('#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape');
+    const menu = document.querySelector("#segmented-buttons-wrapper");
+    const button = document.getElementById(buttonId);
 
-    if (menu !== null) {
-        const button1 = document.createElement("button");
-        button1.id = buttonName;
+    if (menu !== null && button === null) {
+        const button1 = createButton(buttonId);
         menu.appendChild(button1);
         return button1;
     }
@@ -50,7 +46,24 @@ Program.utils.display = (data) => {
 };
 
 
+function createButton(buttonId) {
+    const ytbButtonStyle = "yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m yt-spec-button-shape-next--icon-leading";
+
+    const button1 = document.createElement("button");
+    button1.id = buttonId;
+    button1.className = ytbButtonStyle;
+    button1.innerText = "EX";
+    return button1;
+}
+
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 function compactNumber(number) {
+    console.log(number)
     if (number < 1000) {
         return number;
     }

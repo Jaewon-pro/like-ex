@@ -4,18 +4,19 @@ const Program = {
     utils: {}
 }
 
-Program.apiController = {};
-Program.utils = {};
-
-
 document.addEventListener("yt-navigate-finish", async () => {
     // A Listener for when a Youtube page has fully loaded
     const buttonName = 'like-ex-button';
+    
+    const button = await Program.utils.createButton(buttonName);
 
-    await Program.utils.createButton(buttonName);
+    if (button === null || button === undefined) return;
+    setEventListener(button);
+});
 
-    const button = document.getElementById(buttonName);
 
+function setEventListener(button) {
+    button
     button.addEventListener('click', () => {
         // A Listener for when a Youtube page has fully loaded
         const usingAPI = "ryd"; // = getAPI();
@@ -23,8 +24,11 @@ document.addEventListener("yt-navigate-finish", async () => {
             .onLoad()
             .then(Program.utils.display);
     });
-});
+}
 
+
+Program.apiController = {};
+Program.utils = {};
 
 Program.getInstance = () => {
     if (typeof Program.instance == "undefined") { 

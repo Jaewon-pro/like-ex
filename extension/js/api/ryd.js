@@ -26,7 +26,6 @@ Program.apiController["ryd"].api = (videoId) => {
 
 Program.apiController["ryd"].fetchJson = async (videoId) => {
     const endPoint = Program.apiController["ryd"].api(videoId);
-    console.log(endPoint);
     try {
         const response = await fetch(endPoint);
         if (!response.ok) {
