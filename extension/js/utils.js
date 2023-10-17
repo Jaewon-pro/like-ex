@@ -52,7 +52,8 @@ function createButton(buttonId) {
     const button1 = document.createElement("button");
     button1.id = buttonId;
     button1.className = ytbButtonStyle;
-    button1.innerText = "EX";
+    button1.innerText = "🔍";
+    // button1.innerHTML = ```<span>!</span>```;
     return button1;
 }
 
@@ -77,24 +78,39 @@ function compactNumber(number) {
 
 
 async function insertDislikes(dislikesString) {
-    const iconElement = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon");
+    const parent = "#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button"
+    const divClass = "yt-spec-button-shape-next__button-text-content";
 
-    if (iconElement === null) {
-        console.error("Failed to find an iconElement");
-        return;
+    const parentElement = document.querySelector(`${parent}`)
+
+    if (parentElement === null) {
+        console.error("Failed to find an iconElement")
+        return
     }
 
-    const spanDislikes = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button > div > yt-icon > span")
-    if (spanDislikes === null) { // When <span> element absents for displaying dislikes
-        const newElement = document.createElement("span");
-        newElement.textContent = dislikesString;
-        iconElement.insertAdjacentHTML('afterend', newElement.outerHTML);
+    let divElement = document.querySelector(`${parent} > #${divClass}`)
+    if (divElement === null) {
+        divElement = document.createElement("div")
+        divElement.className = divClass
+        parentElement.appendChild(divElement)
+    }
+
+    let spanElement = document.querySelector(`${parent} > #${divClass} > span`)
+
+    if (spanElement === null) { // When <span> element absents for displaying dislikes
+        spanElement = document.createElement("span")
+        spanElement.textContent = dislikesString
+        spanElement.className = "yt-core-attributed-string yt-core-attributed-string--white-space-no-wrap"
+        spanElement.role = "text"
+        divElement.appendChild(spanElement)
+        parentElement.className = "yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m yt-spec-button-shape-next--icon-leading yt-spec-button-shape-next--segmented-end"
+        // parentElement.style.width = '88px'
+
     } else {
-        spanDislikes.textContent = dislikesString;
+        divElement.textContent = dislikesString
     }
 
-    const divDislike = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button");
-    divDislike.style.width = '80px';
+    // const divDislike = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button");
 }
 
 async function insertDislikesShorts(dislikesString) {
