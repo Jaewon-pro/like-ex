@@ -3,7 +3,7 @@ Program.utils.createButton = async (buttonId) => {
     const waitTime = 100;
     await delay(waitTime); // 바로 하면 못 찾음
 
-    const menu = document.querySelector("#segmented-buttons-wrapper");
+    const menu = document.querySelector("#top-level-buttons-computed");
     const button = document.getElementById(buttonId);
 
     if (menu !== null && button === null) {
@@ -53,7 +53,6 @@ function createButton(buttonId) {
     button1.id = buttonId;
     button1.className = ytbButtonStyle;
     button1.innerText = "🔍";
-    // button1.innerHTML = ```<span>!</span>```;
     return button1;
 }
 
@@ -78,40 +77,42 @@ function compactNumber(number) {
 
 
 async function insertDislikes(dislikesString) {
-    const parent = "#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button"
+    const parent = "#top-level-buttons-computed > segmented-like-dislike-button-view-model > yt-smartimation > div > div > dislike-button-view-model > toggle-button-view-model > button";
     const divClass = "yt-spec-button-shape-next__button-text-content";
 
-    const parentElement = document.querySelector(`${parent}`)
+    const parentElement = document.querySelector(parent);
 
     if (parentElement === null) {
-        console.error("Failed to find an iconElement")
-        return
+        console.error("Failed to find a button");
+        return;
     }
 
-    let divElement = document.querySelector(`${parent} > #${divClass}`)
+    let divElement = parentElement.querySelector(`.${divClass}`);
     if (divElement === null) {
-        divElement = document.createElement("div")
-        divElement.className = divClass
-        parentElement.appendChild(divElement)
+        divElement = document.createElement("div");
+        divElement.className = divClass;
+        parentElement.appendChild(divElement);
     }
 
-    let spanElement = document.querySelector(`${parent} > #${divClass} > span`)
+    const spanElement = await getOrCreateSpan(divElement, dislikesString);
+    spanElement.textContent = dislikesString;
+    parentElement.className = "yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m yt-spec-button-shape-next--icon-leading yt-spec-button-shape-next--segmented-end";
 
-    if (spanElement === null) { // When <span> element absents for displaying dislikes
-        spanElement = document.createElement("span")
-        spanElement.textContent = dislikesString
-        spanElement.className = "yt-core-attributed-string yt-core-attributed-string--white-space-no-wrap"
-        spanElement.role = "text"
-        divElement.appendChild(spanElement)
-        parentElement.className = "yt-spec-button-shape-next yt-spec-button-shape-next--tonal yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m yt-spec-button-shape-next--icon-leading yt-spec-button-shape-next--segmented-end"
-        // parentElement.style.width = '88px'
-
-    } else {
-        divElement.textContent = dislikesString
-    }
-
-    // const divDislike = document.querySelector("#segmented-dislike-button > ytd-toggle-button-renderer > yt-button-shape > button");
 }
+
+async function getOrCreateSpan(divElement) {
+    const selected = divElement.querySelector("span");
+    if (selected) {
+        console.log(divElement)
+        return selected;
+    }
+    const spanElement = document.createElement("span");
+    spanElement.className = "yt-core-attributed-string yt-core-attributed-string--white-space-no-wrap";
+    spanElement.role = "text";
+    divElement.appendChild(spanElement);
+    return spanElement;
+}
+
 
 async function insertDislikesShorts(dislikesString) {
     const spanElement = document.querySelector("#dislike-button > yt-button-shape > label > div > span");
